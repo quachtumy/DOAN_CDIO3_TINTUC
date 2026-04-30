@@ -2,10 +2,9 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-# 🔥 load model 1 lần (global)
-model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+# load model 1 lần
+model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
 
-# 🔹 keyword score
 def keyword_score(query, text):
     query = query.lower()
     text = text.lower()
@@ -23,15 +22,11 @@ def keyword_score(query, text):
 
     return score
 
-
-# 🔹 semantic score
 def semantic_scores(query, embeddings):
     query_emb = model.encode([query])
     scores = cosine_similarity(query_emb, embeddings)[0]
     return scores
 
-
-# 🔥 MAIN FUNCTION (dùng cho API)
 def hybrid_search(query, ids, texts, embeddings, top_k=5):
     sem_scores = semantic_scores(query, embeddings)
 
@@ -49,6 +44,6 @@ def hybrid_search(query, ids, texts, embeddings, top_k=5):
     top_results = []
 
     for idx, _ in results[:top_k]:
-        top_results.append({ "id": ids[idx] })
+        top_results.append({ 'id': ids[idx] })
 
     return top_results

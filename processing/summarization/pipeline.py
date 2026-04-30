@@ -9,5 +9,5 @@ def summarize_pipeline(text):
 
     bullets = refine_summary(text)
     if not bullets:
-        return sentences
+        return []
     return bullets

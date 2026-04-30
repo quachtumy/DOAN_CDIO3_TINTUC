@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from database.db import get_connection
 from processing.search.search_service import search
 from processing.search.related_service import get_related_articles
-from processing.trending.service import get_trending_topics
 
 app = FastAPI()
 
@@ -62,14 +61,53 @@ def get_one_articles(articles_id: int):
         'summary': row[6]
     }
 
-@app.get("/search")
+# Lấy ra các bài báo liên quan khi người dùng nhập từ khoá
+@app.get('/search')
 def search_api(q: str, top_k: int = 5):
     return search(q, top_k)
 
-@app.get("/related/{article_id}")
+# Lấy ra các bài báo liên quan khi người dùng nhấp vào xem một bài nào đó
+@app.get('/related/{article_id}')
 def related_api(article_id: int):
     return get_related_articles(article_id)
 
-@app.get("/trending")
-def trending_api():
-    return get_trending_topics()
+# Lấy ra danh sách bài báo nổi bật
+@app.get('/trending')
+def get_trending():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, main_article, size
+        FROM TrendingTopics
+        ORDER BY size DESC
+    """)
+
+    topics = cursor.fetchall()
+
+    result = []
+
+    for t in topics:
+        topic_id = t[0]
+
+        cursor.execute("""
+            SELECT A.id, A.title
+            FROM TrendingArticles TA
+            JOIN Articles A ON TA.article_id = A.id
+            WHERE TA.topic_id = %s
+            LIMIT 5
+        """, (topic_id,))
+
+        articles = cursor.fetchall()
+
+        result.append({
+            'title': t[1],
+            'size': t[2],
+            'articles': [
+                {'id': a[0], 'title': a[1]} for a in articles
+            ]
+        })
+
+    conn.close()
+
+    return result

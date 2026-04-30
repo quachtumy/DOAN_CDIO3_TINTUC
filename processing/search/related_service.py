@@ -3,11 +3,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 from database.db import get_connection
 
 # load 1 lần
-data = joblib.load("models/embeddings.pkl")
+data = joblib.load('models/embeddings.pkl')
 
-ids = data["ids"]
-texts = data["texts"]
-embeddings = data["embeddings"]
+ids = data['ids']
+texts = data['texts']
+embeddings = data['embeddings']
 
 # map id -> index
 id_to_index = {id_: i for i, id_ in enumerate(ids)}
@@ -43,7 +43,7 @@ def get_related_articles(article_id, top_k=5):
     conn = get_connection()
     cursor = conn.cursor()
 
-    format_strings = ",".join(["%s"] * len(results))
+    format_strings = ','.join(['%s'] * len(results))
 
     cursor.execute(f"""
         SELECT id, title
@@ -62,8 +62,8 @@ def get_related_articles(article_id, top_k=5):
     for rid in results:
         if rid in data_map:
             final.append({
-                "id": rid,
-                "title": data_map[rid]
+                'id': rid,
+                'title': data_map[rid]
             })
 
     return final
