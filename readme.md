@@ -9,10 +9,10 @@ Hệ thống thu thập và tổ chức tin tức đa nguồn dựa trên kỹ t
       | Trường | Giá trị |
       |---------------|----------------------------------|
       |Connection Name|CDIO3 |
-      |Hostname |switchback.proxy.rlwy.net |
-      |Port | 12519 |
+      |Hostname |viaduct.proxy.rlwy.net |
+      |Port | 13482 |
       |Username | root |
-      |Password | zalXOWZnMSUESimZnuYiqjyGuUakrYsd |
+      |Password | OfOftyCkRCqJZTbqRyNPCyyOFMuORTyx |
       |Default Schema | railway |
     - B4: OK để connect
     - \*\*Lưu ý: Không được sửa đổi dữ liệu trong DB, chỉ có BE mới
